@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +16,7 @@ import {
 } from "@/lib/validation/contact";
 import { track, trackAdsConversion } from "@/lib/analytics";
 import { EmailLink } from "@/components/EmailLink";
+import { BUSINESS_EMAIL, IS_PREVIEW } from "@/lib/site-config";
 
 /**
  * GAS DESIGNS — CONTACT FORM
@@ -68,6 +70,13 @@ export function ContactForm({ initialService }: { initialService?: ServiceTitle 
   const onSubmit = handleSubmit(
     async (values) => {
       setSubmitError(null);
+
+      /*
+       * The preview is a static export with no API route behind it. Bail out
+       * before the fetch rather than letting it 404 — the form stays on screen
+       * and fully reviewable, it simply does not send.
+       */
+      if (IS_PREVIEW) return;
 
       try {
         const response = await fetch("/api/contact", {
@@ -353,12 +362,12 @@ export function ContactForm({ initialService }: { initialService?: ServiceTitle 
           <span>
             I agree that Gas Designs may use the details above to respond to this
             enquiry, in line with the{" "}
-            <a
+            <Link
               href="/privacy-policy"
               className="text-warm-white underline decoration-signal-yellow decoration-2 underline-offset-4"
             >
               Privacy Policy
-            </a>
+            </Link>
             .
           </span>
         </label>
@@ -386,10 +395,16 @@ export function ContactForm({ initialService }: { initialService?: ServiceTitle 
         </div>
       )}
 
+      {IS_PREVIEW && (
+        <p className="text-sm text-valve-steel">
+          Enquiries are disabled on this preview. Email {BUSINESS_EMAIL}.
+        </p>
+      )}
+
       <div className="flex flex-col gap-4 @md:flex-row @md:items-center">
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || IS_PREVIEW}
           className="inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md bg-signal-yellow px-7 py-3.5 text-base font-semibold text-carbon transition-colors hover:bg-signal-yellow-soft disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isSubmitting ? "Sending…" : "Send enquiry"}

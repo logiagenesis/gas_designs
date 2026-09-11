@@ -51,6 +51,13 @@ export const BUSINESS_NAME = "Gas Designs" as const;
 /** Confirmed contact email. */
 export const BUSINESS_EMAIL = "pierre@gasdesigns.co.za" as const;
 
+/**
+ * True only in the GitHub Pages preview deployment, which sets
+ * NEXT_PUBLIC_PREVIEW=true. Gates everything that must not behave like the
+ * real site: indexing, and submitting the enquiry form.
+ */
+export const IS_PREVIEW = process.env.NEXT_PUBLIC_PREVIEW === "true";
+
 /** Canonical production origin, no trailing slash. */
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.gasdesigns.co.za"

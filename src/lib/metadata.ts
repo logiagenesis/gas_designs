@@ -1,5 +1,15 @@
 import type { Metadata } from "next";
-import { BUSINESS_NAME, SITE_URL } from "@/lib/site-config";
+import { BUSINESS_NAME, IS_PREVIEW, SITE_URL } from "@/lib/site-config";
+
+/** Applied site-wide in the preview deployment. Nothing may override it. */
+export const ROBOTS_PREVIEW = { index: false, follow: false } as const;
+
+/** The production default, set on the root layout. */
+export const ROBOTS_PRODUCTION = {
+  index: true,
+  follow: true,
+  googleBot: { index: true, follow: true, "max-image-preview": "large" },
+} as const;
 
 /**
  * Builds per-page metadata.
@@ -55,6 +65,15 @@ export function pageMetadata({
       description,
       images: ["/og.png"],
     },
-    ...(noIndex ? { robots: { index: false, follow: true } } : {}),
+    /*
+     * Page-level robots would otherwise silently re-enable indexing on the
+     * preview: a page that sets its own `robots` replaces the root layout's.
+     * In preview every page therefore carries the same noindex.
+     */
+    ...(IS_PREVIEW
+      ? { robots: ROBOTS_PREVIEW }
+      : noIndex
+        ? { robots: { index: false, follow: true } }
+        : {}),
   };
 }

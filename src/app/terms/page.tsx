@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Section } from "@/components/Section";
 import { EmailLink } from "@/components/EmailLink";
 import { Prose } from "@/components/Prose";
@@ -67,7 +68,7 @@ export default function TermsPage() {
           <h2>Enquiries</h2>
           <p>
             Enquiries sent through this site are handled as described in the{" "}
-            <a href="/privacy-policy">Privacy Policy</a>. Please do not send
+            <Link href="/privacy-policy">Privacy Policy</Link>. Please do not send
             confidential or sensitive information through the form.
           </p>
 

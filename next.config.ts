@@ -27,12 +27,35 @@ const securityHeaders = [
   },
 ];
 
-const nextConfig: NextConfig = {
-  poweredByHeader: false,
-  reactStrictMode: true,
-  async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
-  },
-};
+/**
+ * GitHub Pages preview build.
+ *
+ * Pages serves static files only, so the preview is a static export under the
+ * repository's path. Two things cannot come with it: `headers()` is not
+ * supported alongside `output: "export"`, and `/api/contact` has no runtime to
+ * execute in — the deploy workflow removes that route before building.
+ *
+ * This branch is reached only when the workflow sets GITHUB_PAGES=true. A
+ * normal `npm run build` is completely unaffected and keeps its security
+ * headers and its API route.
+ */
+const isPages = process.env.GITHUB_PAGES === "true";
+
+const nextConfig: NextConfig = isPages
+  ? {
+      poweredByHeader: false,
+      reactStrictMode: true,
+      output: "export",
+      basePath: "/gas_designs",
+      trailingSlash: true,
+      images: { unoptimized: true },
+    }
+  : {
+      poweredByHeader: false,
+      reactStrictMode: true,
+      async headers() {
+        return [{ source: "/:path*", headers: securityHeaders }];
+      },
+    };
 
 export default nextConfig;

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 /**
  * Defers the contact form bundle on pages where the form is well below the
@@ -21,12 +22,12 @@ const ContactForm = dynamic(
         <p className="type-label text-valve-steel">Loading the enquiry form…</p>
         <p className="mt-3 text-sm leading-6 text-valve-steel">
           If it does not appear,{" "}
-          <a
+          <Link
             href="/contact"
             className="text-mist underline decoration-white/30 underline-offset-4"
           >
             use the contact page
-          </a>
+          </Link>
           .
         </p>
       </div>

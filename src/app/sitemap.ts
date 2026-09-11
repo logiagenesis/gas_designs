@@ -2,6 +2,9 @@ import type { MetadataRoute } from "next";
 import { SERVICES } from "@/data/services";
 import { SITE_URL } from "@/lib/site-config";
 
+/** Required by `output: "export"`, which cannot generate this at request time. */
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 

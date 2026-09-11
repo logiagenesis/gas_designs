@@ -5,10 +5,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import {
   BUSINESS_NAME,
+  IS_PREVIEW,
   SITE_DESCRIPTION,
   SITE_TAGLINE,
   SITE_URL,
 } from "@/lib/site-config";
+import { ROBOTS_PREVIEW, ROBOTS_PRODUCTION } from "@/lib/metadata";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -65,11 +67,10 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: ["/og.png"],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
+  // The preview deployment is never indexed. On GitHub Pages this meta tag is
+  // the control that actually works: robots.txt is served from a subpath there,
+  // where crawlers do not read it.
+  robots: IS_PREVIEW ? ROBOTS_PREVIEW : ROBOTS_PRODUCTION,
   ...(googleSiteVerification
     ? { verification: { google: googleSiteVerification } }
     : {}),

@@ -45,13 +45,15 @@ jobs:
       # with an underscore — including Next's entire /_next asset tree.
       - run: touch out/.nojekyll
 
-      # `enablement: true` turns GitHub Pages on for the repository if it has
-      # never been enabled, and sets its source to GitHub Actions. Without it
-      # the first run fails with "Get Pages site failed ... Not Found", because
-      # the action only reads the Pages config and cannot create it.
+      # ONE-TIME PREREQUISITE, done by a repository admin:
+      #   Settings -> Pages -> Build and deployment -> Source: GitHub Actions
+      #
+      # This step only reads that setting; it cannot create it. `enablement:
+      # true` was tried and is refused with "Create Pages site failed: Resource
+      # not accessible by integration" — creating a Pages site needs admin
+      # rights that the workflow's GITHUB_TOKEN does not have, whatever
+      # permissions the workflow requests.
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -172,7 +172,15 @@ strong {
   max-width: 62ch;
 }
 
+/* Buttons do not inherit the body font size, so set it explicitly and keep
+   every string on the site — visible or screen-reader only — at 14px or up. */
+button {
+  font-family: inherit;
+  font-size: 16px;
+}
+
 .sr-only {
+  font-size: 14px;
   position: absolute;
   width: 1px;
   height: 1px;

@@ -63,9 +63,16 @@
 }
 
 .media img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* A failed image is removed from the flow so the slot beneath shows through. */
+.media img[data-failed] {
+  display: none;
 }
 
 .media--hero {
@@ -81,13 +88,16 @@
 }
 
 /*
-  Placeholder shown until the photograph is supplied. Prints the expected
-  filename so the missing asset is obvious rather than looking like a bug.
-  JS swaps an <img> for this on error; see src/js/main.js.
+  Placeholder for a photograph that has not been supplied yet. It is present in
+  the markup by default and sits beneath the <img>, so a real photo simply
+  covers it. JS removes it once an image loads successfully. Rendering it by
+  default rather than injecting it on error means a lazy-loaded slot below the
+  fold is never briefly blank.
 */
 .media__slot {
   position: absolute;
   inset: 0;
+  z-index: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -436,4 +446,44 @@
 
 .contact-list a {
   color: var(--text);
+}
+
+/* ----------------------------------------------------------- logo slot ----
+   The approved logo file has not been supplied. Until it is, the header and
+   footer show the name as type inside a marked slot, so the gap is obvious
+   rather than looking like a broken image. Delete nothing — dropping
+   gasdesigns-logo.svg into public/assets/brand/ replaces this automatically.
+   -------------------------------------------------------------------------- */
+
+.logo-fallback {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.logo-fallback::after {
+  content: "LOGO";
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+@media (max-width: 419px) {
+  .logo-fallback {
+    font-size: 15px;
+    padding: 5px 9px;
+  }
+  .logo-fallback::after {
+    display: none;
+  }
 }

@@ -34,29 +34,48 @@ function initMenu() {
    work instead of a fault.
    -------------------------------------------------------------------------- */
 
-function showSlot(img) {
+/**
+ * A photograph that loaded covers its slot, so the slot can go. One that
+ * failed is hidden, letting the labelled slot beneath it show through.
+ */
+function resolveMedia(img) {
   const holder = img.closest(".media");
-  if (!holder || holder.querySelector(".media__slot")) return;
+  if (!holder) return;
 
-  const name = img.dataset.slot || img.getAttribute("src") || "image";
-  const slot = document.createElement("div");
-  slot.className = "media__slot";
-  slot.innerHTML =
-    '<strong>Image slot</strong><span></span>';
-  slot.querySelector("span").textContent = name;
-  holder.appendChild(slot);
-
-  const picture = img.closest("picture");
-  (picture || img).remove();
+  if (img.naturalWidth > 0) {
+    holder.querySelector(".media__slot")?.remove();
+  } else {
+    img.setAttribute("data-failed", "");
+  }
 }
 
 function initImages() {
   document.querySelectorAll(".media img").forEach((img) => {
-    if (img.complete && img.naturalWidth === 0) {
-      showSlot(img);
+    if (img.complete) {
+      resolveMedia(img);
       return;
     }
-    img.addEventListener("error", () => showSlot(img), { once: true });
+    img.addEventListener("load", () => resolveMedia(img), { once: true });
+    img.addEventListener("error", () => resolveMedia(img), { once: true });
+  });
+}
+
+/**
+ * The brand logo is supplied by the client. Until the file exists, show the
+ * name as type in a marked slot rather than a broken image.
+ */
+function initLogo() {
+  document.querySelectorAll("img[data-logo]").forEach((img) => {
+    const swap = () => {
+      if (img.naturalWidth > 0) return;
+      const span = document.createElement("span");
+      span.className = "logo-fallback";
+      span.textContent = "Gas Designs";
+      span.title = "Logo slot — awaiting assets/brand/gasdesigns-logo.svg";
+      img.replaceWith(span);
+    };
+    if (img.complete) swap();
+    else img.addEventListener("error", swap, { once: true });
   });
 }
 
@@ -242,6 +261,7 @@ function initYear() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initMenu();
+  initLogo();
   initImages();
   initServicePreselect();
   initForm();

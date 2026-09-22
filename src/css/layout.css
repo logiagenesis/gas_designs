@@ -103,12 +103,19 @@
   height: 22px;
 }
 
+/*
+  Specificity note: the quote button also carries .btn, which sets
+  display:inline-flex in components.css — loaded after this file. A bare
+  .header__cta rule ties on specificity and loses to it, leaving the desktop
+  button on screen at 360px and pushing the layout 79px wide. Qualifying with
+  .header wins the tie.
+*/
 @media (max-width: 899px) {
   .header__nav,
-  .header__cta {
+  .header .header__cta {
     display: none;
   }
-  .header__toggle {
+  .header .header__toggle {
     display: inline-flex;
   }
 }

@@ -12,7 +12,7 @@
  * Missing files are not an error. Slots the client has not filled yet simply
  * have nothing to optimise, and the page shows a labelled placeholder instead.
  */
-import { readdir, stat } from "node:fs/promises";
+import { readdir, stat, unlink } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
@@ -39,7 +39,26 @@ function targetFor(base) {
 
 const kb = (n) => `${(n / 1024).toFixed(0)} KB`;
 
+/**
+ * The README files in public/assets are instructions for whoever uploads the
+ * photographs. They belong in the repository, not on the live site.
+ */
+async function stripDeveloperNotes() {
+  for (const dir of ["dist/assets/img", "dist/assets/brand"]) {
+    const full = path.resolve(dir);
+    if (!existsSync(full)) continue;
+    for (const file of await readdir(full)) {
+      if (file.toLowerCase().endsWith(".md")) {
+        await unlink(path.join(full, file));
+        console.log(`[images] Removed ${dir}/${file} from the build output.`);
+      }
+    }
+  }
+}
+
 async function run() {
+  await stripDeveloperNotes();
+
   if (!existsSync(DIR)) {
     console.log("[images] dist/assets/img not present — nothing to optimise.");
     return;

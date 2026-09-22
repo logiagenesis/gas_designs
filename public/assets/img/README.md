@@ -11,7 +11,7 @@ references them directly and a mismatch renders an empty slot.
 | `service-03.jpg` | 1200×900 | Industrial Gas Installations & Maintenance |
 | `service-04.jpg` | 1200×900 | Bulk LPG Installations |
 | `service-05.jpg` | 1200×900 | Custom Projects & Developments |
-| `service-06.jpg` | 1200×900 | Certificates of Compliance |
+| `service-06.jpg` | 1200×900 | Certificates of Conformity |
 | `service-07.jpg` | 1200×900 | Gas System Maintenance |
 | `service-08.jpg` | 1200×900 | Gas Leak Detection & Emergency Repairs |
 | `service-09.jpg` | 1200×900 | Basic Electrical & Gas System Support |

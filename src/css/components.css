@@ -1,0 +1,439 @@
+/* ==========================================================================
+   GAS DESIGNS — COMPONENTS: buttons, media, service tiles, form, accordion
+   ========================================================================== */
+
+/* ----------------------------------------------------------------- buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* Carbon on accent measures 11.6:1. */
+.btn--primary {
+  background-color: var(--accent);
+  color: #121212;
+}
+
+.btn--primary:hover {
+  background-color: var(--accent-hover);
+  color: #121212;
+}
+
+.btn--secondary {
+  background-color: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.btn--secondary:hover {
+  border-color: var(--text-secondary);
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------- media */
+
+.media {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background-color: var(--surface);
+}
+
+.media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media--hero {
+  aspect-ratio: 16 / 10;
+}
+
+.media--wide {
+  aspect-ratio: 16 / 10;
+}
+
+.media--tile {
+  aspect-ratio: 4 / 3;
+}
+
+/*
+  Placeholder shown until the photograph is supplied. Prints the expected
+  filename so the missing asset is obvious rather than looking like a bug.
+  JS swaps an <img> for this on error; see src/js/main.js.
+*/
+.media__slot {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+  text-align: center;
+  background-color: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.media__slot span {
+  font-size: 14px;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.media__slot strong {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ----------------------------------------------------------- service tiles */
+
+.tiles {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tiles {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.tile:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile:hover {
+    transform: none;
+  }
+}
+
+.tile__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px;
+}
+
+.tile h3 {
+  margin-bottom: 10px;
+}
+
+.tile p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.tile__link {
+  margin-top: auto;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.tile__link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* -------------------------------------------------------- two-column split */
+
+.split {
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+  .split--reverse .split__media {
+    order: -1;
+  }
+}
+
+.checklist {
+  margin: 24px 0 0;
+}
+
+.checklist li {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+}
+
+.checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--accent);
+}
+
+.footnote {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+/* -------------------------------------------------------------------- form */
+
+.form {
+  display: grid;
+  gap: 20px;
+}
+
+.form__row {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .form__row--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field > label {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.field .req {
+  color: var(--accent);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 13px 14px;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--text);
+  background-color: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease;
+}
+
+.field textarea {
+  min-height: 132px;
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.75;
+}
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--text-secondary);
+}
+
+.field input[aria-invalid="true"],
+.field select[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+/* #ff8a80 on #121212 measures 8.6:1 — the brief's #c2342b was 3.24:1. */
+.field__error {
+  font-size: 15px;
+  color: var(--error);
+  min-height: 0;
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.consent input {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.form__note {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.form__status {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  font-size: 16px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.form__status[data-tone="error"] {
+  border-color: var(--error);
+}
+
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-panel {
+  padding: 28px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+@media (max-width: 639px) {
+  .form-panel {
+    padding: 20px;
+  }
+}
+
+/* --------------------------------------------------------------- accordion */
+
+.faq {
+  border-top: 1px solid var(--border);
+}
+
+.faq details {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 0;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.faq details[open] summary::after {
+  content: "\2212";
+}
+
+.faq details p {
+  padding-bottom: 20px;
+  margin: 0;
+  max-width: 76ch;
+}
+
+/* ------------------------------------------------------------ contact list */
+
+.contact-list {
+  margin-top: 28px;
+}
+
+.contact-list dt {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.contact-list dd {
+  margin: 0 0 20px;
+  font-size: 17px;
+  color: var(--text);
+}
+
+.contact-list a {
+  color: var(--text);
+}

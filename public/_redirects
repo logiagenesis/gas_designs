@@ -1,5 +1,0 @@
-# Cloudflare Pages redirects.
-# Apache equivalents live in .htaccess for the cPanel deploy.
-
-# Canonical host on the live domain.
-https://gasdesigns.co.za/*  https://www.gasdesigns.co.za/:splat  301

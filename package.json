@@ -1,17 +1,16 @@
 {
   "name": "gas-designs",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "private": true,
-  "description": "Gas Designs — gas installation, maintenance and compliance. Static site.",
   "type": "module",
-  "engines": {
-    "node": ">=20.0.0"
-  },
+  "engines": { "node": ">=20" },
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && node scripts/optimise-images.mjs",
+    "pages": "node scripts/build-pages.mjs",
+    "brand": "node scripts/build-brand.mjs",
+    "prebuild": "npm run brand && npm run pages",
+    "build": "vite build",
+    "dev": "npm run prebuild && vite",
     "preview": "vite preview",
-    "optimise:images": "node scripts/optimise-images.mjs",
     "check:contrast": "node scripts/check-contrast.mjs"
   },
   "devDependencies": {

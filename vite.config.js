@@ -1,38 +1,45 @@
 import { defineConfig } from "vite";
 import { resolve } from "node:path";
+import { readdirSync, existsSync } from "node:fs";
 
 /**
  * Gas Designs — build config.
  *
- * Plain static site. No framework. Vite is here for three things only:
- * bundling the CSS and the one JS file, hashing those filenames for cache
- * busting, and copying `public/` through untouched.
+ * Plain static site: HTML, CSS and one small JS file. Vite bundles and
+ * fingerprints the assets and copies public/ through untouched.
  *
- * `public/` holds everything Apache must serve verbatim: the photographs,
- * send.php, .htaccess, robots.txt and sitemap.xml. Vite never rewrites them.
- *
- * BASE PATH: the production target is cPanel/Apache at the domain root, so the
- * default base is "/". The GitHub Pages preview serves from a subdirectory, so
- * that build sets GITHUB_PAGES=true and gets the repository path instead.
+ * base is /gas_designs/ because the site is served from a repository
+ * subdirectory on GitHub Pages. Every link and asset path in the generated
+ * HTML is written with that prefix by scripts/build-pages.mjs.
  */
-const isPages = process.env.GITHUB_PAGES === "true";
+
+/** Every generated page becomes a Rollup entry point. */
+function htmlInputs() {
+  const inputs = { home: resolve(__dirname, "index.html") };
+  if (existsSync(resolve(__dirname, "404.html"))) {
+    inputs.notFound = resolve(__dirname, "404.html");
+  }
+  for (const dir of ["services", "thank-you", "privacy-policy"]) {
+    const full = resolve(__dirname, dir);
+    if (!existsSync(full)) continue;
+    if (existsSync(resolve(full, "index.html"))) {
+      inputs[dir] = resolve(full, "index.html");
+    }
+    for (const entry of readdirSync(full, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const page = resolve(full, entry.name, "index.html");
+      if (existsSync(page)) inputs[`${dir}-${entry.name}`] = page;
+    }
+  }
+  return inputs;
+}
 
 export default defineConfig({
-  base: isPages ? "/gas_designs/" : "/",
+  base: "/gas_designs/",
   appType: "mpa",
   build: {
     outDir: "dist",
     emptyOutDir: true,
-    assetsInlineLimit: 0,
-    rollupOptions: {
-      input: {
-        home: resolve(__dirname, "index.html"),
-        privacy: resolve(__dirname, "privacy-policy/index.html"),
-        terms: resolve(__dirname, "terms/index.html"),
-        thanks: resolve(__dirname, "thank-you/index.html"),
-        notFound: resolve(__dirname, "404.html"),
-      },
-    },
+    rollupOptions: { input: htmlInputs() },
   },
-  server: { port: 5173 },
 });
